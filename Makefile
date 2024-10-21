@@ -1,8 +1,8 @@
 # Plugin and version settings
 PLUGIN_NAME := example_tool
-VERSION := $(shell git describe --tags --abbrev=0)
-PLUGIN_SO := tools/$(PLUGIN_NAME).so
-REPO := guregodevo/loopchain_tools/ # Update this to your repo
+VERSION := $(shell git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.1")
+PLUGIN_SO := $(PLUGIN_NAME).so
+REPO := guregodevo/loopchain_tools # Update this to your repo
 
 # Build the plugin
 build_plugin:
