@@ -11,10 +11,10 @@ import (
 	"strings"
 )
 
-const CloudFunctionURL = "https://us-central1-dagly-396008.cloudfunctions.net/eval_llm_generated_code"
-
 // PythonExecutionTool represents the tool that sends the code to the Cloud Function
-type PythonExecutionTool struct{}
+type PythonExecutionTool struct {
+	EndpointUrl string
+}
 
 // Define the request and response structure for Cloud Function
 type CodeExecutionRequest struct {
@@ -59,11 +59,11 @@ func (t *PythonExecutionTool) Call(ctx context.Context, code string) (string, er
 		return "", fmt.Errorf("failed to marshal request: %v", err)
 	}
 
-	log.Printf("[INFO] Sending request to Cloud Function at URL: %s\n", CloudFunctionURL)
+	log.Printf("[INFO] Sending request to Cloud Function at URL: %s\n", t.EndpointUrl)
 	log.Printf("[DEBUG] Request payload: %s\n", bodyBytes)
 
 	// Send HTTP POST request to the Cloud Function
-	resp, err := http.Post(CloudFunctionURL, "application/json", bytes.NewBuffer(bodyBytes))
+	resp, err := http.Post(t.EndpointUrl, "application/json", bytes.NewBuffer(bodyBytes))
 	if err != nil {
 		log.Printf("[ERROR] Failed to execute request: %v\n", err)
 		return "", fmt.Errorf("failed to execute request: %v", err)
