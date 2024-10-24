@@ -1,5 +1,5 @@
 # Plugin and version settings
-VERSION := $(shell git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.3")
+VERSION := $(shell git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.4")
 REPO := guregodevo/loopchain_tools # Update this to your repo
 SRC_DIRS := yfinance_news yfinance python chrome example
 OUTPUT_DIR := ./plugins
@@ -12,7 +12,7 @@ create_output_dir:
 build_plugins:
 	@docker build -t go-plugin-builder:latest .
 	@CONTAINER_ID=$$(docker create go-plugin-builder:latest) && \
-	docker cp $$CONTAINER_ID:/app/plugins ./plugins && \
+	docker cp $$CONTAINER_ID:/app/plugins . && \
 	docker rm $$CONTAINER_ID
 
 # Create a new tag for release

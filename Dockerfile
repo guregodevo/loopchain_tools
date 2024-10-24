@@ -11,7 +11,7 @@ ENV CGO_ENABLED=1
 COPY go.mod go.sum ./
 
 # Download dependencies
-RUN go mod tidy && go mod vendor
+RUN go mod download
 
 # Copy the entire source code to the container
 COPY . .
@@ -25,7 +25,7 @@ RUN for dir in yfinance_news yfinance python chrome example; do \
         for file in *.go; do \
             basename=$(basename "$file" .go); \
             echo "Building plugin for $file"; \
-            GOARCH=amd64 GOOS=linux go build -buildmode=plugin -o /app/plugins/"$basename".so "$file"; \
+            GOARCH=amd64 GOOS=linux go build -gcflags="all=-N -l" -buildmode=plugin -o /app/plugins/"$basename".so "$file"; \
         done && \
         cd ..; \
     done
