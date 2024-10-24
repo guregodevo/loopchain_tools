@@ -1,8 +1,6 @@
 module github.com/guregodevo/loopchain_tools
 
-go 1.23
-
-toolchain go1.23.2
+go 1.23.2
 
 require (
 	github.com/chromedp/chromedp v0.11.1
@@ -20,6 +18,5 @@ require (
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/mailru/easyjson v0.7.7 // indirect
 	github.com/pkoukk/tiktoken-go v0.1.6 // indirect
-	go.starlark.net v0.0.0-20230302034142-4b1e35fe2254 // indirect
 	golang.org/x/sys v0.26.0 // indirect
 )

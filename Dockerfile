@@ -1,14 +1,17 @@
 # Use the official Go image as the base image
-FROM golang:1.23 as builder
+FROM go-client-app:latest as builder
 
 # Set the working directory inside the container
 WORKDIR /app
+
+# Enable CGO for plugin compilation
+ENV CGO_ENABLED=1
 
 # Copy go.mod and go.sum files to the container
 COPY go.mod go.sum ./
 
 # Download dependencies
-RUN go mod download
+RUN go mod tidy && go mod vendor
 
 # Copy the entire source code to the container
 COPY . .
@@ -22,13 +25,13 @@ RUN for dir in yfinance_news yfinance python chrome example; do \
         for file in *.go; do \
             basename=$(basename "$file" .go); \
             echo "Building plugin for $file"; \
-            go build -buildmode=plugin -o /app/plugins/"$basename".so "$file"; \
+            GOARCH=amd64 GOOS=linux go build -buildmode=plugin -o /app/plugins/"$basename".so "$file"; \
         done && \
         cd ..; \
     done
 
 # Final stage: copy the plugins to the final image
-FROM golang:1.23
+FROM go-client-app:latest
 WORKDIR /app
 COPY --from=builder /app/plugins /app/plugins
 

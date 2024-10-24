@@ -1,5 +1,5 @@
 # Plugin and version settings
-VERSION := $(shell git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.2")
+VERSION := $(shell git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.3")
 REPO := guregodevo/loopchain_tools # Update this to your repo
 SRC_DIRS := yfinance_news yfinance python chrome example
 OUTPUT_DIR := ./plugins
