@@ -1,6 +1,5 @@
 # Plugin and version settings
 VERSION := $(shell git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.2")
-PLUGIN_SO := $(PLUGIN_NAME).so
 REPO := guregodevo/loopchain_tools # Update this to your repo
 SRC_DIRS := yfinance_news yfinance python chrome example
 OUTPUT_DIR := ./plugins
@@ -9,15 +8,12 @@ OUTPUT_DIR := ./plugins
 create_output_dir:
 	@mkdir -p $(OUTPUT_DIR)
 
-# Build plugins for each Go file inside the specified source directories
-build_plugins: create_output_dir
-	@for dir in $(SRC_DIRS); do \
-		for file in $$dir/*.go; do \
-			basename=$$(basename $$file .go); \
-			echo "Building plugin for $$file"; \
-			go build -buildmode=plugin -o $(OUTPUT_DIR)/$$basename.so $$file; \
-		done \
-	done
+# Build Go plugins using Docker
+build_plugins:
+	@docker build -t go-plugin-builder:latest .
+	@CONTAINER_ID=$$(docker create go-plugin-builder:latest) && \
+	docker cp $$CONTAINER_ID:/app/plugins ./plugins && \
+	docker rm $$CONTAINER_ID
 
 # Create a new tag for release
 tag_version:
@@ -45,11 +41,9 @@ release: build_plugins
 	fi
 	@echo "Released all plugins for version $(VERSION) to GitHub."
 
-
-
 # Clean up build artifacts
 clean:
 	@rm -rf $(OUTPUT_DIR)
 
 # Ensure clean build before releasing
-all: clean build_plugin release
+all: clean build_plugins release
