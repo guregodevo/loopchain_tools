@@ -8,12 +8,22 @@ import (
 
 	"github.com/chromedp/chromedp"
 	"github.com/tmc/langchaingo/llms"
+	"github.com/tmc/langchaingo/tools"
 )
+
+type LLMTool interface {
+	tools.Tool
+	SetLLM(llms.LLM)
+}
 
 // LLMGuidedCrawler implements the Tool interface
 type LLMGuidedCrawler struct {
 	Tool *ChromedpTool // Scraping tool (e.g., Chromedp)
-	Llm  llms.LLM      // LLM model (e.g., GPT)
+	Llm  llms.Model    // LLM model (e.g., GPT)
+}
+
+func (c *LLMGuidedCrawler) SetLLM(llm llms.LLM) {
+	c.Llm = llm
 }
 
 // Name returns the name of the tool

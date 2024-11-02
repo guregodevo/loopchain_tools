@@ -10,6 +10,7 @@ create_output_dir:
 
 # Build Go plugins using Docker
 build_plugins:
+	@go mod vendor
 	@docker build -t go-plugin-builder:latest .
 	@CONTAINER_ID=$$(docker create go-plugin-builder:latest) && \
 	docker cp $$CONTAINER_ID:/app/plugins . && \

@@ -20,5 +20,6 @@ require (
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/mailru/easyjson v0.7.7 // indirect
 	github.com/pkoukk/tiktoken-go v0.1.7 // indirect
+    go.starlark.net v0.0.0-20240925182052-1207426daebd // Explicitly added
 	golang.org/x/sys v0.26.0 // indirect
 )
